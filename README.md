@@ -1,7 +1,7 @@
 # Description
 
 `rcicero` is a bouquet of functions to query the [Cicero API,](https://www.cicerodata.com/api/) 
-a useful tool for data on elected officials.
+a useful tool for data on elected officials. Be sure to check the [Terms of Use](https://www.azavea.com/terms-of-use/?_ga=1.70439831.685925080.1469159734) before your trial.
 
 # Installation
 
