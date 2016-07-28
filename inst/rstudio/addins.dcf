@@ -1,0 +1,4 @@
+Name: Insert %>% View()
+Description: Inserts `%>% View()` at the cursor position.
+Binding: insertInAddin
+Interactive: false
