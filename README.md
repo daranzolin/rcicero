@@ -12,9 +12,8 @@ library(rcicero)
 ```
 
 # Setup
-Some prep work is required before usage. The API requires three parameters: (1) an API key; (2) a user id; and (3) an API token. First, create an 
-account and obtain your API key in your profile. Creating an account is free, and you will be granted 1000 free credits (1 credit per query), but
-you will need to purchase additional credits for further use.
+Some prep work is required before usage. The API requires three parameters: (1) an API key; (2) a user id; and (3) an API token. First, [create an 
+account](https://www.cicerodata.com/free-trial/) and obtain your API key in your profile. Creating an account is free, and you will be granted 1000 free credits (1 credit per query). Further use will require the purchase of additional credits.
 
 Once you obtain your key, run:
 
@@ -38,7 +37,7 @@ santa_clara <- get_legislative_district("3175 Bowers Ave. Santa Clara, CA")
 lewis <- get_official(first_name = "John", last_name = "Lewis", district_type = "NATIONAL_LOWER")
 
 ### By lat/lon coordinates:
-od <- get_official(lat = 40, lon = -75.1)
+x <- get_official(lat = 40, lon = -75.1)
 
 ### By address
 santa_clara <- get_official("3175 Bowers Ave. Santa Clara, CA")
@@ -47,5 +46,3 @@ santa_clara <- get_official("3175 Bowers Ave. Santa Clara, CA")
 # Disclaimers
 The objects returned by these functions are admittedly...messy. That is, they contain nested list columns and other general untidyness. I'd love to clean that up
 when I acquire more time and skill.
-
-
