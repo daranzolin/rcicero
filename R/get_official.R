@@ -54,16 +54,27 @@ get_official <- function(lat = NULL, lon = NULL, address = NULL,
   httr::stop_for_status(resp)
   balance <- resp$headers$`x-cicero-credit-balance`
   print(paste("You have", balance, "credits remaining.", sep = " "))
-  parsed <- jsonlite::fromJSON(httr::content(resp, "text"), flatten = TRUE)
-  if (is.null(parsed$response$results$candidates)) {
-    off_df <- data.frame(parsed$response$results$officials)
-  } else if (is.null(data.frame(parsed$response$results$candidates$officials))) {
-    off_df <- data.frame(parsed$response$results$officials)
-  } else {
-    off_df <- data.frame(parsed$response$results$candidates$officials)
-  }
-  if (nrow(off_df) == 0) {
-    stop("Sorry, that information could not be located. Please see the API documentation at https://cicero.azavea.com/docs")
-  }
-  return(off_df)
+  json <- httr::content(resp, "text")
+  df <- json %>% tidyjson::as.tbl_json() %>%
+    tidyjson::enter_object("response") %>%
+    tidyjson::enter_object("results") %>%
+    tidyjson::enter_object("candidates") %>% tidyjson::gather_array() %>%
+    tidyjson::spread_values(match_postal = tidyjson::jstring("match_postal")) %>%
+    tidyjson::enter_object("officials") %>% tidyjson::gather_array() %>%
+    tidyjson::spread_values(last_name = tidyjson::jstring("last_name"),
+                            first_name = tidyjson::jstring("first_name"),
+                            notes = tidyjson::jstring("notes"),
+                            photo_url = tidyjson::jstring("photo_origin_url"),
+                            party = tidyjson::jstring("party")
+    ) %>%
+    tidyjson::enter_object("office") %>%
+    tidyjson::enter_object("district") %>%
+    tidyjson::spread_values(district_type = tidyjson::jstring("district_type"),
+                            country = tidyjson::jstring("country"),
+                            district_id = tidyjson::jstring("district_id"),
+                            label = tidyjson::jstring("label"),
+                            state = tidyjson::jstring("state")) %>%
+    dplyr::select(-document.id, -array.index) %>%
+    dplyr::as_data_frame()
+  return(df)
 }

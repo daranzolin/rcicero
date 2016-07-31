@@ -6,12 +6,14 @@ Description: This package makes getting data from the Cicero API easier for
     useRs. The objects returned by its functions are admittedly messy data frames,
     and some of the data may require unnesting, but it includes everything available
     from Cicero.
-Depends: 
+Depends:
     R (>= 3.2.2)
 License: MIT + file LICENSE
 LazyData: true
 RoxygenNote: 5.0.1
 Imports: httr,
-    jsonlite
+    jsonlite,
+    tidyjson,
+    dplyr
 URL: https://github.com/daranzolin/rcicero
 BugReports: https://github.com/daranzolin/rcicero/issues

@@ -4,7 +4,7 @@
 \alias{check_key}
 \title{check_key}
 \usage{
-check_key()
+check_key(x)
 }
 \value{
 string
