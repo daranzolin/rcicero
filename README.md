@@ -54,4 +54,5 @@ santa_clara <- get_official("3175 Bowers Ave. Santa Clara, CA")
 * Inclusion of more elected official data
 * Better error and exception handling
 * Facilitation of international queries
+* Vignette
 * A `shiny` app?
