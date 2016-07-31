@@ -34,6 +34,8 @@ get_legislative_district <- function(address) {
     tidyjson::spread_values(district_type = jstring("district_type"),
                             state = jstring("state"),
                             district_id = jstring("district_id"),
-                            label = jstring("label"))
+                            label = jstring("label")) %>%
+    dplyr::select(-document.id, -array.index) %>%
+    dplyr::as_data_frame()
   return(df)
 }
