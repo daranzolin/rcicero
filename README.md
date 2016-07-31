@@ -30,7 +30,7 @@ every 24 hours.
 
 # Usage
 
-Two functions make the bulk of `rcicero`: `get_legislative_district()` and `get_official()`. Both return data frames with a variety of information. 
+Three functions make the bulk of `rcicero`: `get_legislative_district()`, `get_official()`, and `get_nonlegislative_district()`. Each returns a data frame with a variety of information. 
 
 ```
 ### Get legislative district data:
