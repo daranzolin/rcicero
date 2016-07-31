@@ -3,6 +3,10 @@
 `rcicero` is a bouquet of functions to query the [Cicero API,](https://www.cicerodata.com/api/) 
 a useful tool for data on elected officials. Be sure to check the [Terms of Use](https://www.azavea.com/terms-of-use/?_ga=1.70439831.685925080.1469159734) prior to installation.
 
+# Required Packages
+
+`rcicero` requires three packages under the hood: `httr`, `dplyr`, and `tidyjson`. If you work with nested JSON on a semi-regular basis, I highly recommend `tidyjson`. 
+
 # Installation
 
 `rcicero` is not on CRAN, but can be installed via:
@@ -43,6 +47,11 @@ x <- get_official(lat = 40, lon = -75.1)
 santa_clara <- get_official("3175 Bowers Ave. Santa Clara, CA")
 ```
 
-# Disclaimers
-The objects returned by these functions are admittedly...messy. That is, they contain nested list columns and other general untidyness. I'd love to clean that up
-when I acquire more time and skill.
+# Future Work
+
+* Inclusion of historical data and maps
+* Inclusion of election event data
+* Inclusion of more elected official data
+* Better error and exception handling
+* Facilitation of international queries
+* A `shiny` app?
