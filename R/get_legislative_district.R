@@ -20,12 +20,20 @@ get_legislative_district <- function(address) {
   resp <- httr::GET(url,
                     query = args)
   httr::stop_for_status(resp)
-  parsed <- jsonlite::fromJSON(httr::content(resp, "text"), flatten = TRUE)
-  district_df <- parsed$response$results$candidates$districts[[1]]
-  if (is.null(district_df)) {
-    stop("Sorry, that address could not be located.")
-  }
+  json <- httr::content(resp, "text")
   balance <- resp$headers$`x-cicero-credit-balance`
   print(paste("You have", balance, "credits remaining.", sep = " "))
-  return(district_df)
+  df <- json %>% tidyjson::as.tbl_json() %>%
+    tidyjson::enter_object("response") %>%
+    tidyjson::enter_object("results") %>%
+    tidyjson::enter_object("candidates") %>% tidyjson::gather_array() %>%
+    tidyjson::spread_values(address = jstring("match_addr"),
+                            latitude = jstring("y"),
+                            longitude = jstring("x")) %>%
+    tidyjson::enter_object("districts") %>% tidyjson::gather_array() %>%
+    tidyjson::spread_values(district_type = jstring("district_type"),
+                            state = jstring("state"),
+                            district_id = jstring("district_id"),
+                            label = jstring("label"))
+  return(df)
 }
