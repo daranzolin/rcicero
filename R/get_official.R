@@ -70,7 +70,7 @@ get_official <- function(lat = NULL, lon = NULL, address = NULL,
                             party = tidyjson::jstring("party")
     ) %>%
     tidyjson::enter_object("office") %>%
-    tidyjson::spread_values(title = jstring("title")) %>%
+    tidyjson::spread_values(title = tidyjson::jstring("title")) %>%
     tidyjson::enter_object("district") %>%
     tidyjson::spread_values(district_type = tidyjson::jstring("district_type"),
                             country = tidyjson::jstring("country"),
