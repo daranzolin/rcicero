@@ -57,7 +57,7 @@ get_official <- function(lat = NULL, lon = NULL, address = NULL,
   balance <- resp$headers$`x-cicero-credit-balance`
   print(paste("You have", balance, "credits remaining.", sep = " "))
   json <- httr::content(resp, "text")
-  df <- json %>% tidyjson::as.tbl_json %>%
+  df <- json %>% tidyjson::as.tbl_json() %>%
     tidyjson::enter_object("response") %>%
     tidyjson::enter_object("results") %>%
     tidyjson::enter_object("candidates") %>% tidyjson::gather_array() %>%
