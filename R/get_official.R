@@ -2,6 +2,8 @@
 #'
 #'Obtain official information from the Cicero API. Can seach by latitude and longitude coordinates, address, and first and last name.
 #'
+#' @importFrom magrittr "%>%"
+#'
 #' @param lat Latitude coordiante
 #' @param lon Longitude coordinate
 #' @param address Street address
@@ -55,7 +57,7 @@ get_official <- function(lat = NULL, lon = NULL, address = NULL,
   balance <- resp$headers$`x-cicero-credit-balance`
   print(paste("You have", balance, "credits remaining.", sep = " "))
   json <- httr::content(resp, "text")
-  df <- json %>% tidyjson::as.tbl_json() %>%
+  df <- json %>% tidyjson::as.tbl_json %>%
     tidyjson::enter_object("response") %>%
     tidyjson::enter_object("results") %>%
     tidyjson::enter_object("candidates") %>% tidyjson::gather_array() %>%
@@ -68,6 +70,7 @@ get_official <- function(lat = NULL, lon = NULL, address = NULL,
                             party = tidyjson::jstring("party")
     ) %>%
     tidyjson::enter_object("office") %>%
+    tidyjson::spread_values(title = jstring("title")) %>%
     tidyjson::enter_object("district") %>%
     tidyjson::spread_values(district_type = tidyjson::jstring("district_type"),
                             country = tidyjson::jstring("country"),

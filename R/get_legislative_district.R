@@ -1,8 +1,11 @@
 #' get_legislative_district
 #'
+#' @importFrom magrittr "%>%"
+#'
 #' @param address A string with most of any street address. Most of the time, you don't need to include zip code.
 #'
 #' @return data.frame with some list columns
+#'
 #' @export
 #'
 #' @examples

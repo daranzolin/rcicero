@@ -1,0 +1,22 @@
+---
+title: "Vignette for rcicero"
+author: "David Ranzolin"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette for rcicero}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Setup
+
+If you have not done so already, [create an account here.](https://www.cicerodata.com/free-trial/) Creating an account is free, and you will be granted 1000 free credits (1 credit per query). Further use will require the purchase of additional credits.
+
+You need three items to query the API: (1) a key; (2) a user id; and (3) a token. You can find your key in your account profile but must make a `POST` request to obtain your user id and token. 
+
+Stay tuned for more of this `rcicero` vignette...
+

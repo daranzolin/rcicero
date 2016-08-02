@@ -1,5 +1,7 @@
 #' get_nonlegislative_district
 #'
+#' @importFrom magrittr "%>%"
+#'
 #' @param address a string containing a street address
 #' @param type a string, nonlegislative district type that is either: CENSUS, COUNTY, JUDICIAL, POLICE, SCHOOL, or WATERSHED
 #'
