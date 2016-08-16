@@ -1,6 +1,9 @@
 #' get_legislative_district
 #'
 #' @importFrom magrittr "%>%"
+#' @importFrom httr stop_for_status GET content
+#' @importFrom tidyjson as.tbl_json spread_values jstring enter_object
+#' @importFrom dplyr select as_data_frame
 #'
 #' @param address A string with most of any street address. Most of the time, you don't need to include zip code.
 #'
@@ -30,14 +33,14 @@ get_legislative_district <- function(address) {
     tidyjson::enter_object("response") %>%
     tidyjson::enter_object("results") %>%
     tidyjson::enter_object("candidates") %>% tidyjson::gather_array() %>%
-    tidyjson::spread_values(address = jstring("match_addr"),
-                            latitude = jstring("y"),
-                            longitude = jstring("x")) %>%
+    tidyjson::spread_values(address = tidyjson::jstring("match_addr"),
+                            latitude = tidyjson::jstring("y"),
+                            longitude = tidyjson::jstring("x")) %>%
     tidyjson::enter_object("districts") %>% tidyjson::gather_array() %>%
-    tidyjson::spread_values(district_type = jstring("district_type"),
-                            state = jstring("state"),
-                            district_id = jstring("district_id"),
-                            label = jstring("label")) %>%
+    tidyjson::spread_values(district_type = tidyjson::jstring("district_type"),
+                            state = tidyjson::jstring("state"),
+                            district_id = tidyjson::jstring("district_id"),
+                            label = tidyjson::jstring("label")) %>%
     dplyr::select(-document.id, -array.index) %>%
     dplyr::as_data_frame()
   return(df)

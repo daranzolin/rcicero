@@ -1,6 +1,9 @@
 #' get_nonlegislative_district
 #'
 #' @importFrom magrittr "%>%"
+#' @importFrom httr stop_for_status GET content
+#' @importFrom tidyjson as.tbl_json spread_values jstring enter_object
+#' @importFrom dplyr select as_data_frame
 #'
 #' @param address a string containing a street address
 #' @param type a string, nonlegislative district type that is either: CENSUS, COUNTY, JUDICIAL, POLICE, SCHOOL, or WATERSHED

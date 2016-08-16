@@ -3,6 +3,9 @@
 #'Obtain official information from the Cicero API. Can seach by latitude and longitude coordinates, address, and first and last name.
 #'
 #' @importFrom magrittr "%>%"
+#' @importFrom httr stop_for_status GET content
+#' @importFrom tidyjson as.tbl_json spread_values jstring enter_object
+#' @importFrom dplyr select as_data_frame
 #'
 #' @param lat Latitude coordiante
 #' @param lon Longitude coordinate
