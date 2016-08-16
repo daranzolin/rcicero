@@ -28,8 +28,7 @@ get_nonlegislative_district <- function(address, type) {
                     query = args)
   httr::stop_for_status(resp)
   json <- httr::content(resp, "text")
-  balance <- resp$headers$`x-cicero-credit-balance`
-  print(paste("You have", balance, "credits remaining.", sep = " "))
+  sprintf("You have %d credits remaining.", resp$headers$`x-cicero-credit-balance`)
   df <- json %>% tidyjson::as.tbl_json() %>%
     tidyjson::enter_object("response") %>%
     tidyjson::enter_object("results") %>%
