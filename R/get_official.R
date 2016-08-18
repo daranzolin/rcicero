@@ -5,7 +5,7 @@
 #' @importFrom magrittr "%>%"
 #' @importFrom httr stop_for_status GET content
 #' @importFrom tidyjson as.tbl_json spread_values jstring enter_object
-#' @importFrom dplyr select as_data_frame
+#' @importFrom dplyr select as_data_frame left_join contains
 #'
 #' @param lat Latitude coordiante
 #' @param lon Longitude coordinate
@@ -57,9 +57,10 @@ get_official <- function(lat = NULL, lon = NULL, address = NULL,
   resp <- httr::GET(url,
                     query = args)
   httr::stop_for_status(resp)
-  sprintf("You have %d credits remaining.", resp$headers$`x-cicero-credit-balance`)
+  print(paste("You have", resp$headers$`x-cicero-credit-balance`, "credits remaining."))
   json <- httr::content(resp, "text")
-  df <- json %>% tidyjson::as.tbl_json() %>%
+
+  first_pass <- json %>% tidyjson::as.tbl_json() %>%
     tidyjson::enter_object("response") %>%
     tidyjson::enter_object("results") %>%
     tidyjson::enter_object("candidates") %>% tidyjson::gather_array() %>%
@@ -71,15 +72,32 @@ get_official <- function(lat = NULL, lon = NULL, address = NULL,
                             photo_url = tidyjson::jstring("photo_origin_url"),
                             party = tidyjson::jstring("party")
     ) %>%
+    tidyjson::enter_object("identifiers") %>% tidyjson::gather_array() %>%
+    tidyjson::spread_values(identifier = tidyjson::jstring("identifier_value"),
+                            identifier_type = tidyjson::jstring("identifier_type")
+    ) %>%
+    dplyr::as_data_frame() %>%
+    dplyr::distinct(.keep_all = TRUE)
+
+  second_pass <- json %>% tidyjson::as.tbl_json() %>%
+    tidyjson::enter_object("response") %>%
+    tidyjson::enter_object("results") %>%
+    tidyjson::enter_object("candidates") %>% tidyjson::gather_array() %>%
+    tidyjson::enter_object("officials") %>% tidyjson::gather_array() %>%
+    tidyjson::spread_values(last_name = tidyjson::jstring("last_name"),
+                            first_name = tidyjson::jstring("first_name")) %>%
     tidyjson::enter_object("office") %>%
-    tidyjson::spread_values(title = tidyjson::jstring("title")) %>%
     tidyjson::enter_object("district") %>%
     tidyjson::spread_values(district_type = tidyjson::jstring("district_type"),
                             country = tidyjson::jstring("country"),
                             district_id = tidyjson::jstring("district_id"),
                             label = tidyjson::jstring("label"),
                             state = tidyjson::jstring("state")) %>%
-    dplyr::select(-document.id, -array.index) %>%
     dplyr::as_data_frame()
-  return(df)
+
+  off_data <- first_pass %>%
+    dplyr::left_join(second_pass, by = c("first_name", "last_name")) %>%
+    dplyr::select(-dplyr::contains("document"), -dplyr::contains("array"))
+
+  return(off_data)
 }
