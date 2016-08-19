@@ -29,7 +29,7 @@ Behind the scenes, `rcicero` stashes the `user` and `token` values into your glo
 
 # Usage
 
-Three functions make the bulk of `rcicero`: `get_legislative_district()`, `get_official()`, and `get_nonlegislative_district()`. Each returns a data frame with a variety of information. 
+Three functions make the bulk of `rcicero`: `get_legislative_district()`, `get_official()`, `get_nonlegislative_district()`, and `get_upcoming_elections()`. Each returns a `data_frame` with a variety of information. 
 
 ```
 ### Get legislative district data:
@@ -40,18 +40,19 @@ santa_clara <- get_legislative_district("3175 Bowers Ave. Santa Clara, CA")
 lewis <- get_official(first_name = "John", last_name = "Lewis", district_type = "NATIONAL_LOWER")
 
 ### By lat/lon coordinates:
-x <- get_official(lat = 40, lon = -75.1)
+o <- get_official(lat = 40, lon = -75.1)
 
 ### By address
 santa_clara <- get_official("3175 Bowers Ave. Santa Clara, CA")
+
+###Get upcoming elections:
+e <- get_coming_elections(is_state = TRUE, elections = 4)
 ```
 
 # Future Work
 
 * Inclusion of historical data and maps
-* Inclusion of election event data
-* Inclusion of more elected official data
 * Better error and exception handling
-* Facilitation of international queries
+* Tests
 * Vignette
 * A `shiny` app?
