@@ -22,7 +22,7 @@ get_official(lat = NULL, lon = NULL, address = NULL, first_name = NULL,
 \item{district_type}{Officials from which district type?}
 }
 \value{
-Data frame with--alas--nested columns.
+data_frame
 }
 \description{
 Obtain official information from the Cicero API. Can seach by latitude and longitude coordinates, address, and first and last name.

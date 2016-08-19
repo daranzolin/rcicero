@@ -8,13 +8,18 @@
 #' @importFrom dplyr select as_data_frame left_join contains
 #'
 #' @param lat Latitude coordiante
+#'
 #' @param lon Longitude coordinate
+#'
 #' @param address Street address
+#'
 #' @param first_name First name of official
+#'
 #' @param last_name Last name of official
+#'
 #' @param district_type Officials from which district type?
 #'
-#' @return Data frame with--alas--nested columns.
+#' @return data_frame
 #'
 #' @export
 #'

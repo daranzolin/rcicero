@@ -8,7 +8,7 @@
 #' @param address a string containing a street address
 #' @param type a string, nonlegislative district type that is either: CENSUS, COUNTY, JUDICIAL, POLICE, SCHOOL, or WATERSHED
 #'
-#' @return data.frame
+#' @return data_frame
 #' @export
 #'
 #' @examples

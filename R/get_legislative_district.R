@@ -7,7 +7,7 @@
 #'
 #' @param address A string with most of any street address. Most of the time, you don't need to include zip code.
 #'
-#' @return data.frame with some list columns
+#' @return data_frame
 #'
 #' @export
 #'

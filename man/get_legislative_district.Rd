@@ -10,7 +10,7 @@ get_legislative_district(address)
 \item{address}{A string with most of any street address. Most of the time, you don't need to include zip code.}
 }
 \value{
-data.frame with some list columns
+data_frame
 }
 \description{
 get_legislative_district

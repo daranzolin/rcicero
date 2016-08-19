@@ -3,6 +3,7 @@
 export(get_legislative_district)
 export(get_nonlegislative_district)
 export(get_official)
+export(get_upcoming_elections)
 export(insertInAddin)
 export(set_token_and_user)
 importFrom(dplyr,as_data_frame)

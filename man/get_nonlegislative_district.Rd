@@ -12,7 +12,7 @@ get_nonlegislative_district(address, type)
 \item{type}{a string, nonlegislative district type that is either: CENSUS, COUNTY, JUDICIAL, POLICE, SCHOOL, or WATERSHED}
 }
 \value{
-data.frame
+data_frame
 }
 \description{
 get_nonlegislative_district
