@@ -46,7 +46,7 @@ o <- get_official(lat = 40, lon = -75.1)
 santa_clara <- get_official("3175 Bowers Ave. Santa Clara, CA")
 
 ###Get upcoming elections:
-e <- get_coming_elections(is_state = TRUE, elections = 4)
+e <- get_upcoming_elections(is_state = TRUE, elections = 4)
 ```
 
 # Future Work
