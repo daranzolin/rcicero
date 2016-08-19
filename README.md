@@ -22,11 +22,10 @@ account](https://www.cicerodata.com/free-trial/) and obtain your API key in your
 Once you obtain your key, run:
 
 ```
-get_user_and_token("your_account_email_address", "your_password")
+set_user_and_token("your_account_email_address", "your_password")
 ```
 
-This will return a list that includes your user id and token. `rcicero` then requires you to stash these three items in your `.Renviron`. Warning: the token expires
-every 24 hours.
+Behind the scenes, `rcicero` stashes the `user` and `token` values into your global options. You must then add the `key` to your `.Renviron`. Warning: the token expires every 24 hours.
 
 # Usage
 

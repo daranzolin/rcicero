@@ -1,5 +1,5 @@
 ###This function returns a list with your user and token
-#' get_token_and_user
+#' set_token_and_user
 #'
 #'Obtain your Cicero API token and user with a POST request
 #'
@@ -10,8 +10,8 @@
 #' @export
 #'
 #' @examples
-#' #' get_token_and_user("darazolin@gmail.com", "password")
-get_token_and_user <- function(username, password) {
+#' #' set_token_and_user("darazolin@gmail.com", "password")
+set_token_and_user <- function(username, password) {
   req <- httr::POST("http://cicero.azavea.com/v3.1/token/new.json",
                     body = list(username = username,
                                 password = password))
@@ -20,37 +20,20 @@ get_token_and_user <- function(username, password) {
     stop("Your connection was not authorized. Please check to see if you have a valid Cicero account.",
          .call = FALSE)
   }
-  return(user_and_token)
+  options(cicero_user = user_and_token$user)
+  options(cicero_token = user_and_token$token)
+  print("Your Cicero API user and token options have been set.")
 }
 
-
-#' check_token
-#'
-#' Checks for and returns the token in your .Renviron
-#'
-#' @return string
-#' @export
-#'
-#' @examples
-#' #' check_token()
 check_token <- function() {
-  token <- Sys.getenv('CICERO_API_TOKEN')
-  if (identical(token, "")) {
-    stop("Please set env var CICERO_API_TOKEN to your personal access token",
+  token <- getOption('cicero_token')
+  if (is.null(token)) {
+    stop("No token detected. Please run set_user_and_token() without error",
          call. = FALSE)
   }
   token
 }
 
-#' check_key
-#'
-#' Checks for and returns the key in your .Renviron
-#'
-#' @return string
-#' @export
-#'
-#' @examples
-#' #' check_key()
 check_key <- function(x) {
   key <- Sys.getenv('CICERO_API_KEY')
   if (identical(key, "")) {
@@ -60,19 +43,10 @@ check_key <- function(x) {
   key
 }
 
-#' check_user
-#'
-#' Checks for and returns user in your .Renviron
-#'
-#' @return string
-#' @export
-#'
-#' @examples
-#' #' check_user()
 check_user <- function() {
-  user <- Sys.getenv('CICERO_API_USER')
-  if (identical(user, "")) {
-    stop("Please set env var CICERO_API_USER to your personal user",
+  user <- getOption('cicero_user')
+  if (is.null(user)) {
+    stop("No token detected. Please run set_user_and_token() without error",
          call. = FALSE)
   }
   user
@@ -80,18 +54,6 @@ check_user <- function() {
 
 cicero_url <- function() 'https://cicero.azavea.com/v3.1'
 
-### This function turns the district_type parameter into a list
-#' district_type_args_list
-#'
-#'format the arguments into acceptable query
-#'
-#' @param x list from parameters
-#'
-#' @return list
-#' @export
-#'
-#' @examples
-#' #' district_type_args_list(district_type)
 district_type_args_list <- function(x) {
   dtl <- list()
   for (i in seq_along(x)) {
