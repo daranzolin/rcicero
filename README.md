@@ -22,10 +22,10 @@ account](https://www.cicerodata.com/free-trial/) and obtain your API key in your
 Once you obtain your key, run:
 
 ```
-set_user_and_token("your_account_email_address", "your_password")
+set_token_and_user("your_account_email_address", "your_password")
 ```
 
-Behind the scenes, `rcicero` stashes the `user` and `token` values into your global options. You must then add the `key` to your `.Renviron`. Warning: the token expires every 24 hours.
+Behind the scenes, `rcicero` stashes the `user` and `token` values into your global options. You must then add the `key` to your `.Renviron`, as `"CICERO_API_KEY`" Warning: the token expires every 24 hours.
 
 # Usage
 
@@ -52,6 +52,7 @@ e <- get_upcoming_elections(is_state = TRUE, elections = 4)
 # Future Work
 
 * Inclusion of historical data and maps
+* Better querying
 * Better error and exception handling
 * Tests
 * Vignette
