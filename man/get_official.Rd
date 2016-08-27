@@ -4,7 +4,7 @@
 \alias{get_official}
 \title{get_official}
 \usage{
-get_official(lat = NULL, lon = NULL, address = NULL, first_name = NULL,
+get_official(lat = NULL, lon = NULL, first_name = NULL,
   last_name = NULL, district_type = c("STATE_LOWER", "STATE_UPPER",
   "NATIONAL_UPPER", "NATIONAL_LOWER"))
 }
@@ -13,13 +13,13 @@ get_official(lat = NULL, lon = NULL, address = NULL, first_name = NULL,
 
 \item{lon}{Longitude coordinate}
 
-\item{address}{Street address}
-
 \item{first_name}{First name of official}
 
 \item{last_name}{Last name of official}
 
 \item{district_type}{Officials from which district type?}
+
+\item{address}{Street address}
 }
 \value{
 data_frame

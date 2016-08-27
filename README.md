@@ -23,9 +23,10 @@ Once you obtain your key, run:
 
 ```
 set_token_and_user("your_account_email_address", "your_password")
+[1] "Your Cicero API user and token options have been set."
 ```
 
-Behind the scenes, `rcicero` stashes the `user` and `token` values into your global options. You must then add the `key` to your `.Renviron`, as `"CICERO_API_KEY`" Warning: the token expires every 24 hours.
+Behind the scenes, `rcicero` stashes the `user` and `token` values into your global options. You must then add the `key` to your `.Renviron`, as `"CICERO_API_KEY"`. For help on setting up your .Renviron (and everything else R-related) see Jenny Bryan's [Stat545 page.](http://stat545.com/bit003_api-key-env-var.html)  Warning: the API token expires every 24 hours.
 
 # Usage
 
@@ -42,11 +43,14 @@ lewis <- get_official(first_name = "John", last_name = "Lewis", district_type = 
 ### By lat/lon coordinates:
 o <- get_official(lat = 40, lon = -75.1)
 
-### By address
-santa_clara <- get_official("3175 Bowers Ave. Santa Clara, CA")
-
 ###Get upcoming elections:
 e <- get_upcoming_elections(is_state = TRUE, elections = 4)
+
+###Get non-legislative district information
+nld <- get_nonlegislative_district(address = "3175 Bowers Ave. Santa Clara, CA, type = "SCHOOL")
+
+### Get map data
+map <- get_map(state = "CA", district_type = "NATIONAL_LOWER", district_id = 5)
 ```
 
 # Future Work
