@@ -1,4 +1,4 @@
-![](http://2rct3i2488gxf9jvb1lqhek9-wpengine.netdna-ssl.com/wp-content/uploads/2014/04/cicero.png)
+![](https://www.azavea.com/wp-content/uploads/2015/03/cicero_1000px.jpg)
 
 # Description
 
