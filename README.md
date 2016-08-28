@@ -1,3 +1,5 @@
+![](http://2rct3i2488gxf9jvb1lqhek9-wpengine.netdna-ssl.com/wp-content/uploads/2014/04/cicero.png)
+
 # Description
 
 `rcicero` is a bouquet of functions to query the [Cicero API,](https://www.cicerodata.com/api/) 
