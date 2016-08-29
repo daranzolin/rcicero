@@ -22,10 +22,10 @@ get_official(lat = NULL, lon = NULL, first_name = NULL,
 \item{address}{Street address}
 }
 \value{
-data_frame
+list
 }
 \description{
-Obtain official information from the Cicero API. Can seach by latitude and longitude coordinates, address, and first and last name.
+Obtain official information from the Cicero API. Can seach by latitude and longitude coordinates and first and last name.
 }
 \examples{
 #' get_official(lat = 40, lon = -75.1)
