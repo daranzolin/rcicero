@@ -131,10 +131,10 @@ get_official <- function(lat = NULL, lon = NULL, first_name = NULL, last_name = 
     dplyr::distinct(.keep_all = TRUE)
 
   off_data <- list(
-    gen_info_and_identifiers,
-    committee_info,
-    address_info,
-    district_info
+    get_info_and_identifiers = gen_info_and_identifiers,
+    committee_info = committee_info,
+    address_info = address_info,
+    district_info = district_info
   )
   return(off_data)
 }
