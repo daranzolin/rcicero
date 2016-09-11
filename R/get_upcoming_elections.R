@@ -44,7 +44,7 @@ get_upcoming_elections <- function(election_expire_date_on_or_after = "today", i
   url <- paste0(cicero_url(), "/election_event")
   resp <- httr::GET(url,
                     query = args)
-  print(paste("You have", resp$headers$`x-cicero-credit-balance`, "credits remaining."))
+  message(paste("You have", resp$headers$`x-cicero-credit-balance`, "credits remaining."))
   httr::stop_for_status(resp)
   json <- httr::content(resp, "text")
   df <- json %>% tidyjson::as.tbl_json() %>%

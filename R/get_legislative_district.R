@@ -27,7 +27,7 @@ get_legislative_district <- function(address) {
                     query = args)
   httr::stop_for_status(resp)
   json <- httr::content(resp, "text")
-  print(paste("You have", resp$headers$`x-cicero-credit-balance`, "credits remaining."))
+  message(paste("You have", resp$headers$`x-cicero-credit-balance`, "credits remaining."))
   df <- json %>% tidyjson::as.tbl_json() %>%
     tidyjson::enter_object("response") %>%
     tidyjson::enter_object("results") %>%

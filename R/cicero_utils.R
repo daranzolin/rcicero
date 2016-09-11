@@ -22,7 +22,7 @@ set_token_and_user <- function(username, password) {
   }
   options(cicero_user = user_and_token$user)
   options(cicero_token = user_and_token$token)
-  print("Your Cicero API user and token options have been set.")
+  message("Your Cicero API user and token options have been set.")
 }
 
 check_token <- function() {

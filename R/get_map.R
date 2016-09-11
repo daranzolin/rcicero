@@ -35,7 +35,7 @@ get_map <- function(state, country = "US", district_id, district_type) {
   resp <- httr::GET(url,
                     query = args)
   httr::stop_for_status(resp)
-  print(paste("You have", resp$headers$`x-cicero-credit-balance`, "credits remaining."))
+  message(paste("You have", resp$headers$`x-cicero-credit-balance`, "credits remaining."))
   dat <- httr::content(resp, "parsed")
   img_dat <- dat$response$results$maps[[1]]
   return(img_dat)
