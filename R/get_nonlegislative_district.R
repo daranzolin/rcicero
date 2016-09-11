@@ -5,24 +5,29 @@
 #' @importFrom tidyjson as.tbl_json spread_values jstring enter_object
 #' @importFrom dplyr select as_data_frame
 #'
-#' @param address a string containing a street address
+#' @param search_loc a string containing a street address
 #' @param type a string, nonlegislative district type that is either: CENSUS, COUNTY, JUDICIAL, POLICE, SCHOOL, or WATERSHED
 #'
 #' @return data_frame
 #' @export
 #'
 #' @examples
-#' #' get_nonlegislative_district(address = "3175 Bowers Ave. Santa Clara, CA, type = "SCHOOL")
-get_nonlegislative_district <- function(address, type) {
-  key <- check_key()
-  token <- check_token()
-  user <- check_user()
-  args <- list(key = key,
-               token = token,
-               user = user,
-               format = "json",
-               search_loc = address,
-               type = type)
+#' #' get_nonlegislative_district(search_loc = "3175 Bowers Ave. Santa Clara, CA, type = "SCHOOL")
+get_nonlegislative_district <- function(search_loc = NULL, lat = NULL, lon = NULL,
+                                        type = "SCHOOL") {
+  if (!type %in% c("CENSUS", "COUNTY", "JUDICIAL", "POLICE", "SCHOOL", "WATERSHED") || length(type) != 1) {
+    stop("type argument must be one of CENSUS, COUNTY, JUDICIAL, POLICE, SCHOOL, or WATERSHED")
+  }
+  auth_args <- list(
+    key = check_key(),
+    token = check_token(),
+    user = check_user(),
+    format = "json"
+  )
+  args <- as.list(match.call())
+  args <- c(args, auth_args)
+  args <- args[sapply(args, function(x) !is.call(x) && !is.name(x))]
+
   url <- paste0(cicero_url(), "/nonlegislative_district")
   resp <- httr::GET(url,
                     query = args)

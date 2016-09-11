@@ -4,11 +4,14 @@
 \alias{get_official}
 \title{get_official}
 \usage{
-get_official(lat = NULL, lon = NULL, first_name = NULL,
-  last_name = NULL, district_type = c("STATE_LOWER", "STATE_UPPER",
-  "NATIONAL_UPPER", "NATIONAL_LOWER"))
+get_official(search_loc = NULL, lat = NULL, lon = NULL,
+  first_name = NULL, last_name = NULL, valid_on = NULL,
+  district_type = c("STATE_LOWER", "STATE_UPPER", "NATIONAL_UPPER",
+  "NATIONAL_LOWER", "NATIONAL_EXEC"))
 }
 \arguments{
+\item{search_loc}{Street address}
+
 \item{lat}{Latitude coordiante}
 
 \item{lon}{Longitude coordinate}
@@ -17,9 +20,9 @@ get_official(lat = NULL, lon = NULL, first_name = NULL,
 
 \item{last_name}{Last name of official}
 
-\item{district_type}{Officials from which district type?}
+\item{valid_on}{date for official}
 
-\item{address}{Street address}
+\item{district_type}{Officials from which district type?}
 }
 \value{
 list
@@ -29,7 +32,7 @@ Obtain official information from the Cicero API. Can seach by latitude and longi
 }
 \examples{
 #' get_official(lat = 40, lon = -75.1)
-#' get_official(address = "3175 Bowers Ave. Santa Clara, CA", district_type = "STATE_LOWER", "STATE_UPPER")
+#' get_official(search_loc = "3175 Bowers Ave. Santa Clara, CA", district_type = "STATE_LOWER", "STATE_UPPER")
 #' get_official(last_name = "Obama")
 }
 

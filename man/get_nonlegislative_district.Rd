@@ -4,10 +4,11 @@
 \alias{get_nonlegislative_district}
 \title{get_nonlegislative_district}
 \usage{
-get_nonlegislative_district(address, type)
+get_nonlegislative_district(search_loc = NULL, lat = NULL, lon = NULL,
+  type = "SCHOOL")
 }
 \arguments{
-\item{address}{a string containing a street address}
+\item{search_loc}{a string containing a street address}
 
 \item{type}{a string, nonlegislative district type that is either: CENSUS, COUNTY, JUDICIAL, POLICE, SCHOOL, or WATERSHED}
 }
@@ -18,6 +19,6 @@ data_frame
 get_nonlegislative_district
 }
 \examples{
-#' get_nonlegislative_district(address = "3175 Bowers Ave. Santa Clara, CA, type = "SCHOOL")
+#' get_nonlegislative_district(search_loc = "3175 Bowers Ave. Santa Clara, CA, type = "SCHOOL")
 }
 

@@ -15,6 +15,8 @@
 #'
 #' @param first_name First name of official
 #'
+#' @param valid_on date for official
+#'
 #' @param last_name Last name of official
 #'
 #' @param district_type Officials from which district type?
@@ -25,11 +27,22 @@
 #'
 #' @examples
 #' #' get_official(lat = 40, lon = -75.1)
-#' #' get_official(address = "3175 Bowers Ave. Santa Clara, CA", district_type = "STATE_LOWER", "STATE_UPPER")
+#' #' get_official(search_loc = "3175 Bowers Ave. Santa Clara, CA", district_type = "STATE_LOWER", "STATE_UPPER")
 #' #' get_official(last_name = "Obama")
 get_official <- function(search_loc = NULL, lat = NULL, lon = NULL, first_name = NULL, last_name = NULL,
-                         district_type = c("STATE_LOWER", "STATE_UPPER",
+                          valid_on = NULL,
+                          district_type = c("STATE_LOWER", "STATE_UPPER",
                                            "NATIONAL_UPPER", "NATIONAL_LOWER", "NATIONAL_EXEC")) {
+  valid_on <- try(as.Date(valid_on, format = "%Y-%m-%d"))
+  if (class(valid_on) == "try-error" || is.na(valid_on)) {
+    stop("valid_on argument must be in %Y-%m-%d format")
+  }
+  for (district_t in district_type) {
+    if (!district_t %in% c("STATE_LOWER", "STATE_UPPER",
+                           "NATIONAL_UPPER", "NATIONAL_LOWER", "NATIONAL_EXEC")) {
+      stop("district_type argument must be STATE_LOWER, STATE_UPPER, NATIONAL_UPPER, NATIONAL_LOWER, or NATIONAL_EXEC")
+    }
+  }
   auth_args <- list(
     key = check_key(),
     token = check_token(),
