@@ -4,10 +4,10 @@
 \alias{get_legislative_district}
 \title{get_legislative_district}
 \usage{
-get_legislative_district(address)
+get_legislative_district(search_loc = NULL, lat = NULL, lon = NULL)
 }
 \arguments{
-\item{address}{A string with most of any street address. Most of the time, you don't need to include zip code.}
+\item{search_loc}{A string with most of any street address. Most of the time, you don't need to include zip code.}
 }
 \value{
 data_frame

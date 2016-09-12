@@ -62,3 +62,7 @@ district_type_args_list <- function(x) {
   }
   dtl
 }
+
+sc <- function(x) {
+  Filter(Negate(is.null), x)
+}

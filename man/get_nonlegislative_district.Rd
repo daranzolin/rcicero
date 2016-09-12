@@ -10,6 +10,10 @@ get_nonlegislative_district(search_loc = NULL, lat = NULL, lon = NULL,
 \arguments{
 \item{search_loc}{a string containing a street address}
 
+\item{lat}{latitude coordinate}
+
+\item{lon}{longitude coordinate}
+
 \item{type}{a string, nonlegislative district type that is either: CENSUS, COUNTY, JUDICIAL, POLICE, SCHOOL, or WATERSHED}
 }
 \value{

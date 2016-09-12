@@ -33,25 +33,32 @@ get_official <- function(search_loc = NULL, lat = NULL, lon = NULL, first_name =
                           valid_on = NULL,
                           district_type = c("STATE_LOWER", "STATE_UPPER",
                                            "NATIONAL_UPPER", "NATIONAL_LOWER", "NATIONAL_EXEC")) {
-  valid_on <- try(as.Date(valid_on, format = "%Y-%m-%d"))
-  if (class(valid_on) == "try-error" || is.na(valid_on)) {
-    stop("valid_on argument must be in %Y-%m-%d format")
-  }
-  for (district_t in district_type) {
-    if (!district_t %in% c("STATE_LOWER", "STATE_UPPER",
-                           "NATIONAL_UPPER", "NATIONAL_LOWER", "NATIONAL_EXEC")) {
-      stop("district_type argument must be STATE_LOWER, STATE_UPPER, NATIONAL_UPPER, NATIONAL_LOWER, or NATIONAL_EXEC")
+  if (!is.null(valid_on)) {
+    valid_on <- try(as.Date(valid_on, format = "%Y-%m-%d"))
+    if (class(valid_on) == "try-error" || is.na(valid_on)) {
+      stop("valid_on argument must be in %Y-%m-%d format")
     }
   }
-  auth_args <- list(
+  valid_district_types <-  c("STATE_LOWER", "STATE_UPPER",
+                        "NATIONAL_UPPER", "NATIONAL_LOWER", "NATIONAL_EXEC")
+  district_checks <- sapply(district_type, function(x) x %in% valid_district_types)
+  if (!all(district_checks)) {
+    stop("district_type argument must be STATE_LOWER, STATE_UPPER, NATIONAL_UPPER, NATIONAL_LOWER, or NATIONAL_EXEC")
+  }
+  args <- sc(list(
     key = check_key(),
     token = check_token(),
     user = check_user(),
+    search_loc = search_loc,
+    lat = lat,
+    lon = lon,
+    first_name = first_name,
+    last_name = last_name,
     format = "json"
+    )
   )
-  args <- as.list(match.call())
-  args <- c(args, auth_args, district_type_args_list(district_type))
-  args <- args[sapply(args, function(x) !is.call(x) && !is.name(x))]
+  dist_args <- district_type_args_list(district_type)
+  args <- c(args, dist_args)
 
   url <- paste0(cicero_url(), "/official")
   resp <- httr::GET(url,
@@ -60,92 +67,187 @@ get_official <- function(search_loc = NULL, lat = NULL, lon = NULL, first_name =
   httr::stop_for_status(resp)
   json <- httr::content(resp, "text")
 
-  gen_info <- json %>% tidyjson::as.tbl_json() %>%
-    tidyjson::enter_object("response") %>%
-    tidyjson::enter_object("results") %>%
-    tidyjson::enter_object("candidates") %>% tidyjson::gather_array() %>%
-    tidyjson::enter_object("officials") %>% tidyjson::gather_array() %>%
-    tidyjson::spread_values(last_name = tidyjson::jstring("last_name"),
-                            first_name = tidyjson::jstring("first_name"),
-                            notes = tidyjson::jstring("notes"),
-                            photo_url = tidyjson::jstring("photo_origin_url"),
-                            party = tidyjson::jstring("party"),
-                            initial_start_date = tidyjson::jstring("initial_term_start_date"),
-                            current_term_start_date = tidyjson::jstring("current_term_start_date"),
-                            webform_url = tidyjson::jstring("web_form_url")
-    ) %>%
-    dplyr::as_data_frame() %>%
-    dplyr::select(-dplyr::contains("document"), -dplyr::contains("array")) %>%
-    dplyr::distinct(.keep_all = TRUE)
+  if (!is.null(search_loc)) {
+    gen_info <- json %>% tidyjson::as.tbl_json() %>%
+      tidyjson::enter_object("response") %>%
+      tidyjson::enter_object("results") %>%
+      tidyjson::enter_object("candidates") %>% tidyjson::gather_array() %>%
+      tidyjson::spread_values(match_postal = tidyjson::jstring("match_postal"),
+                              lat = tidyjson::jnumber("y"),
+                              lon = tidyjson::jnumber("x")
+      ) %>%
+      tidyjson::enter_object("officials") %>% tidyjson::gather_array() %>%
+      tidyjson::spread_values(last_name = tidyjson::jstring("last_name"),
+                              first_name = tidyjson::jstring("first_name"),
+                              notes = tidyjson::jstring("notes"),
+                              photo_url = tidyjson::jstring("photo_origin_url"),
+                              party = tidyjson::jstring("party"),
+                              initial_start_date = tidyjson::jstring("initial_term_start_date"),
+                              current_term_start_date = tidyjson::jstring("current_term_start_date"),
+                              webform_url = tidyjson::jstring("web_form_url")
+      ) %>%
+      dplyr::as_data_frame() %>%
+      dplyr::select(-dplyr::contains("document"), -dplyr::contains("array")) %>%
+      dplyr::distinct(.keep_all = TRUE)
 
-  identifiers <- json %>% tidyjson::as.tbl_json() %>%
-    tidyjson::enter_object("response") %>%
-    tidyjson::enter_object("results") %>%
-    tidyjson::enter_object("candidates") %>% tidyjson::gather_array() %>%
-    tidyjson::enter_object("officials") %>% tidyjson::gather_array() %>%
-    tidyjson::spread_values(last_name = tidyjson::jstring("last_name"),
-                            first_name = tidyjson::jstring("first_name")
-    ) %>%
-    tidyjson::enter_object("identifiers") %>% tidyjson::gather_array() %>%
-    tidyjson::spread_values(identifier = tidyjson::jstring("identifier_value"),
-                            identifier_type = tidyjson::jstring("identifier_type")
-    ) %>%
-    dplyr::as_data_frame() %>%
-    dplyr::select(-dplyr::contains("document"), -dplyr::contains("array")) %>%
-    dplyr::distinct(.keep_all = TRUE)
+    identifiers <- json %>% tidyjson::as.tbl_json() %>%
+      tidyjson::enter_object("response") %>%
+      tidyjson::enter_object("results") %>%
+      tidyjson::enter_object("candidates") %>% tidyjson::gather_array() %>%
+      tidyjson::enter_object("officials") %>% tidyjson::gather_array() %>%
+      tidyjson::spread_values(last_name = tidyjson::jstring("last_name"),
+                              first_name = tidyjson::jstring("first_name")
+      ) %>%
+      tidyjson::enter_object("identifiers") %>% tidyjson::gather_array() %>%
+      tidyjson::spread_values(identifier = tidyjson::jstring("identifier_value"),
+                              identifier_type = tidyjson::jstring("identifier_type")
+      ) %>%
+      dplyr::as_data_frame() %>%
+      dplyr::select(-dplyr::contains("document"), -dplyr::contains("array")) %>%
+      dplyr::distinct(.keep_all = TRUE)
 
-  district_info <- json %>% tidyjson::as.tbl_json() %>%
-    tidyjson::enter_object("response") %>%
-    tidyjson::enter_object("results") %>%
-    tidyjson::enter_object("candidates") %>% tidyjson::gather_array() %>%
-    tidyjson::enter_object("officials") %>% tidyjson::gather_array() %>%
-    tidyjson::spread_values(last_name = tidyjson::jstring("last_name"),
-                            first_name = tidyjson::jstring("first_name")) %>%
-    tidyjson::enter_object("office") %>%
-    tidyjson::enter_object("district") %>%
-    tidyjson::spread_values(district_type = tidyjson::jstring("district_type"),
-                            country = tidyjson::jstring("country"),
-                            district_id = tidyjson::jstring("district_id"),
-                            label = tidyjson::jstring("label"),
-                            state = tidyjson::jstring("state"),
-                            subtype = tidyjson::jstring("subtype")
-    ) %>%
-    dplyr::as_data_frame() %>%
-    dplyr::select(-dplyr::contains("document"), -dplyr::contains("array")) %>%
-    dplyr::distinct(.keep_all = TRUE)
+    district_info <- json %>% tidyjson::as.tbl_json() %>%
+      tidyjson::enter_object("response") %>%
+      tidyjson::enter_object("results") %>%
+      tidyjson::enter_object("candidates") %>% tidyjson::gather_array() %>%
+      tidyjson::enter_object("officials") %>% tidyjson::gather_array() %>%
+      tidyjson::spread_values(last_name = tidyjson::jstring("last_name"),
+                              first_name = tidyjson::jstring("first_name")) %>%
+      tidyjson::enter_object("office") %>%
+      tidyjson::enter_object("district") %>%
+      tidyjson::spread_values(district_type = tidyjson::jstring("district_type"),
+                              country = tidyjson::jstring("country"),
+                              district_id = tidyjson::jstring("district_id"),
+                              label = tidyjson::jstring("label"),
+                              state = tidyjson::jstring("state"),
+                              subtype = tidyjson::jstring("subtype")
+      ) %>%
+      dplyr::as_data_frame() %>%
+      dplyr::select(-dplyr::contains("document"), -dplyr::contains("array")) %>%
+      dplyr::distinct(.keep_all = TRUE)
 
-  committee_info <- json %>% tidyjson::as.tbl_json() %>%
-    tidyjson::enter_object("response") %>%
-    tidyjson::enter_object("results") %>%
-    tidyjson::enter_object("candidates") %>% tidyjson::gather_array() %>%
-    tidyjson::enter_object("officials") %>% tidyjson::gather_array() %>%
-    tidyjson::spread_values(last_name = tidyjson::jstring("last_name"),
-                            first_name = tidyjson::jstring("first_name")) %>%
-    tidyjson::enter_object("committees") %>% tidyjson::gather_array() %>%
-    tidyjson::spread_values(description = tidyjson::jstring("description"),
-                            comm_id = tidyjson::jstring("id")) %>%
-    dplyr::as_data_frame() %>%
-    dplyr::select(-dplyr::contains("document"), -dplyr::contains("array")) %>%
-    dplyr::distinct(.keep_all = TRUE)
+    committee_info <- json %>% tidyjson::as.tbl_json() %>%
+      tidyjson::enter_object("response") %>%
+      tidyjson::enter_object("results") %>%
+      tidyjson::enter_object("candidates") %>% tidyjson::gather_array() %>%
+      tidyjson::enter_object("officials") %>% tidyjson::gather_array() %>%
+      tidyjson::spread_values(last_name = tidyjson::jstring("last_name"),
+                              first_name = tidyjson::jstring("first_name")) %>%
+      tidyjson::enter_object("committees") %>% tidyjson::gather_array() %>%
+      tidyjson::spread_values(description = tidyjson::jstring("description"),
+                              comm_id = tidyjson::jstring("id")) %>%
+      dplyr::as_data_frame() %>%
+      dplyr::select(-dplyr::contains("document"), -dplyr::contains("array")) %>%
+      dplyr::distinct(.keep_all = TRUE)
 
-  address_info <- json %>% tidyjson::as.tbl_json() %>%
-    tidyjson::enter_object("response") %>%
-    tidyjson::enter_object("results") %>%
-    tidyjson::enter_object("candidates") %>% tidyjson::gather_array() %>%
-    tidyjson::enter_object("officials") %>% tidyjson::gather_array() %>%
-    tidyjson::spread_values(last_name = tidyjson::jstring("last_name"),
-                            first_name = tidyjson::jstring("first_name")) %>%
-    tidyjson::enter_object("addresses") %>% tidyjson::gather_array() %>%
-    tidyjson::spread_values(postal_code = tidyjson::jstring("postal_code"),
-                            phone = tidyjson::jstring("phone_1"),
-                            fax = tidyjson::jstring("fax_1"),
-                            city = tidyjson::jstring("city"),
-                            state = tidyjson::jstring("state"),
-                            address_1 = tidyjson::jstring("address_1"),
-                            address_2 = tidyjson::jstring("address_2"),
-                            address_3 = tidyjson::jstring("address_3"))%>%
-    dplyr::select(-dplyr::contains("document"), -dplyr::contains("array")) %>%
-    dplyr::distinct(.keep_all = TRUE)
+    address_info <- json %>% tidyjson::as.tbl_json() %>%
+      tidyjson::enter_object("response") %>%
+      tidyjson::enter_object("results") %>%
+      tidyjson::enter_object("candidates") %>% tidyjson::gather_array() %>%
+      tidyjson::enter_object("officials") %>% tidyjson::gather_array() %>%
+      tidyjson::spread_values(last_name = tidyjson::jstring("last_name"),
+                              first_name = tidyjson::jstring("first_name")) %>%
+      tidyjson::enter_object("addresses") %>% tidyjson::gather_array() %>%
+      tidyjson::spread_values(postal_code = tidyjson::jstring("postal_code"),
+                              phone = tidyjson::jstring("phone_1"),
+                              fax = tidyjson::jstring("fax_1"),
+                              city = tidyjson::jstring("city"),
+                              state = tidyjson::jstring("state"),
+                              address_1 = tidyjson::jstring("address_1"),
+                              address_2 = tidyjson::jstring("address_2"),
+                              address_3 = tidyjson::jstring("address_3")
+      ) %>%
+      dplyr::select(-dplyr::contains("document"), -dplyr::contains("array")) %>%
+      dplyr::distinct(.keep_all = TRUE)
+
+  } else {
+    gen_info <- json %>% tidyjson::as.tbl_json() %>%
+      tidyjson::enter_object("response") %>%
+      tidyjson::enter_object("results") %>%
+      tidyjson::spread_values(match_postal = tidyjson::jstring("match_postal"),
+                              lat = tidyjson::jnumber("y"),
+                              lon = tidyjson::jnumber("x")
+      ) %>%
+      tidyjson::enter_object("officials") %>% tidyjson::gather_array() %>%
+      tidyjson::spread_values(last_name = tidyjson::jstring("last_name"),
+                              first_name = tidyjson::jstring("first_name"),
+                              notes = tidyjson::jstring("notes"),
+                              photo_url = tidyjson::jstring("photo_origin_url"),
+                              party = tidyjson::jstring("party"),
+                              initial_start_date = tidyjson::jstring("initial_term_start_date"),
+                              current_term_start_date = tidyjson::jstring("current_term_start_date"),
+                              webform_url = tidyjson::jstring("web_form_url")
+      ) %>%
+      dplyr::as_data_frame() %>%
+      dplyr::select(-dplyr::contains("document"), -dplyr::contains("array")) %>%
+      dplyr::distinct(.keep_all = TRUE)
+
+    identifiers <- json %>% tidyjson::as.tbl_json() %>%
+      tidyjson::enter_object("response") %>%
+      tidyjson::enter_object("results") %>%
+      tidyjson::enter_object("officials") %>% tidyjson::gather_array() %>%
+      tidyjson::spread_values(last_name = tidyjson::jstring("last_name"),
+                              first_name = tidyjson::jstring("first_name")
+      ) %>%
+      tidyjson::enter_object("identifiers") %>% tidyjson::gather_array() %>%
+      tidyjson::spread_values(identifier = tidyjson::jstring("identifier_value"),
+                              identifier_type = tidyjson::jstring("identifier_type")
+      ) %>%
+      dplyr::as_data_frame() %>%
+      dplyr::select(-dplyr::contains("document"), -dplyr::contains("array")) %>%
+      dplyr::distinct(.keep_all = TRUE)
+
+    district_info <- json %>% tidyjson::as.tbl_json() %>%
+      tidyjson::enter_object("response") %>%
+      tidyjson::enter_object("results") %>%
+      tidyjson::enter_object("officials") %>% tidyjson::gather_array() %>%
+      tidyjson::spread_values(last_name = tidyjson::jstring("last_name"),
+                              first_name = tidyjson::jstring("first_name")) %>%
+      tidyjson::enter_object("office") %>%
+      tidyjson::enter_object("district") %>%
+      tidyjson::spread_values(district_type = tidyjson::jstring("district_type"),
+                              country = tidyjson::jstring("country"),
+                              district_id = tidyjson::jstring("district_id"),
+                              label = tidyjson::jstring("label"),
+                              state = tidyjson::jstring("state"),
+                              subtype = tidyjson::jstring("subtype")
+      ) %>%
+      dplyr::as_data_frame() %>%
+      dplyr::select(-dplyr::contains("document"), -dplyr::contains("array")) %>%
+      dplyr::distinct(.keep_all = TRUE)
+
+    committee_info <- json %>% tidyjson::as.tbl_json() %>%
+      tidyjson::enter_object("response") %>%
+      tidyjson::enter_object("results") %>%
+      tidyjson::enter_object("officials") %>% tidyjson::gather_array() %>%
+      tidyjson::spread_values(last_name = tidyjson::jstring("last_name"),
+                              first_name = tidyjson::jstring("first_name")) %>%
+      tidyjson::enter_object("committees") %>% tidyjson::gather_array() %>%
+      tidyjson::spread_values(description = tidyjson::jstring("description"),
+                              comm_id = tidyjson::jstring("id")) %>%
+      dplyr::as_data_frame() %>%
+      dplyr::select(-dplyr::contains("document"), -dplyr::contains("array")) %>%
+      dplyr::distinct(.keep_all = TRUE)
+
+    address_info <- json %>% tidyjson::as.tbl_json() %>%
+      tidyjson::enter_object("response") %>%
+      tidyjson::enter_object("results") %>%
+      tidyjson::enter_object("officials") %>% tidyjson::gather_array() %>%
+      tidyjson::spread_values(last_name = tidyjson::jstring("last_name"),
+                              first_name = tidyjson::jstring("first_name")) %>%
+      tidyjson::enter_object("addresses") %>% tidyjson::gather_array() %>%
+      tidyjson::spread_values(postal_code = tidyjson::jstring("postal_code"),
+                              phone = tidyjson::jstring("phone_1"),
+                              fax = tidyjson::jstring("fax_1"),
+                              city = tidyjson::jstring("city"),
+                              state = tidyjson::jstring("state"),
+                              address_1 = tidyjson::jstring("address_1"),
+                              address_2 = tidyjson::jstring("address_2"),
+                              address_3 = tidyjson::jstring("address_3")
+      ) %>%
+      dplyr::select(-dplyr::contains("document"), -dplyr::contains("array")) %>%
+      dplyr::distinct(.keep_all = TRUE)
+  }
 
   off_data <- list(
     gen_info = gen_info,
