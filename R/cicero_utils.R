@@ -63,6 +63,15 @@ district_type_args_list <- function(x) {
   dtl
 }
 
+last_name_args_list <- function(x) {
+  ln <- list()
+  for (i in seq_along(x)) {
+    ln[[i]] <- x[i]
+    names(ln)[[i]] <- "last_name"
+  }
+  ln
+}
+
 sc <- function(x) {
   Filter(Negate(is.null), x)
 }

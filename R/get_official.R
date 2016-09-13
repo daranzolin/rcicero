@@ -45,20 +45,22 @@ get_official <- function(search_loc = NULL, lat = NULL, lon = NULL, first_name =
   if (!all(district_checks)) {
     stop("district_type argument must be STATE_LOWER, STATE_UPPER, NATIONAL_UPPER, NATIONAL_LOWER, or NATIONAL_EXEC")
   }
-  args <- sc(list(
+
+  args <- list(
     key = check_key(),
     token = check_token(),
     user = check_user(),
     search_loc = search_loc,
+    first_name = first_name,
     lat = lat,
     lon = lon,
-    first_name = first_name,
-    last_name = last_name,
     format = "json"
     )
-  )
   dist_args <- district_type_args_list(district_type)
-  args <- c(args, dist_args)
+  last_name <- last_name_args_list(last_name)
+  args <- sc(
+    c(args, last_name, dist_args)
+    )
 
   url <- paste0(cicero_url(), "/official")
   resp <- httr::GET(url,

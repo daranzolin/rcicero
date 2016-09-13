@@ -51,7 +51,7 @@ e <- get_upcoming_elections(is_state = TRUE, elections = 4)
 ###Get non-legislative district information
 nld <- get_nonlegislative_district(search_loc = "3175 Bowers Ave. Santa Clara, CA", type = "SCHOOL")
 
-### Get map data
+### Get map data (work in progress)
 map <- get_map(state = "CA", district_type = "NATIONAL_LOWER", district_id = 5)
 ```
 
