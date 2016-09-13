@@ -36,7 +36,7 @@ Four functions make the bulk of `rcicero`: `get_legislative_district()`, `get_of
 
 ```
 ### Get legislative district data:
-santa_clara <- get_legislative_district("3175 Bowers Ave. Santa Clara, CA")
+santa_clara <- get_legislative_district(seach_loc = "3175 Bowers Ave. Santa Clara, CA")
 
 ### Get official data:
 ### By name
@@ -49,7 +49,7 @@ o <- get_official(lat = 40, lon = -75.1)
 e <- get_upcoming_elections(is_state = TRUE, elections = 4)
 
 ###Get non-legislative district information
-nld <- get_nonlegislative_district(search_loc = "3175 Bowers Ave. Santa Clara, CA, type = "SCHOOL")
+nld <- get_nonlegislative_district(search_loc = "3175 Bowers Ave. Santa Clara, CA", type = "SCHOOL")
 
 ### Get map data
 map <- get_map(state = "CA", district_type = "NATIONAL_LOWER", district_id = 5)
