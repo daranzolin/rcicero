@@ -3,6 +3,9 @@
 #'
 #'Obtain your Cicero API token and user with a POST request
 #'
+#' @importFrom dplyr select as_data_frame contains
+#' @importFrom magrittr "%>%"
+#'
 #' @param username string - your Cicero account username
 #' @param password string - your Cicero account password
 #'
@@ -54,24 +57,22 @@ check_user <- function() {
 
 cicero_url <- function() 'https://cicero.azavea.com/v3.1'
 
-district_type_args_list <- function(x) {
-  dtl <- list()
-  for (i in seq_along(x)) {
-    dtl[[i]] <- x[i]
-    names(dtl)[[i]] <- "district_type"
-  }
-  dtl
-}
-
-last_name_args_list <- function(x) {
+iter_args_list <- function(x, label) {
   ln <- list()
   for (i in seq_along(x)) {
     ln[[i]] <- x[i]
-    names(ln)[[i]] <- "last_name"
+    names(ln)[[i]] <- label
   }
   ln
 }
 
 sc <- function(x) {
   Filter(Negate(is.null), x)
+}
+
+format_df <- function(x) {
+  x <- x %>%
+    dplyr::as_data_frame() %>%
+    dplyr::select(-dplyr::contains("document"), -dplyr::contains("array")) %>%
+    dplyr::distinct(.keep_all = TRUE)
 }

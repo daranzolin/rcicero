@@ -32,7 +32,7 @@ Behind the scenes, `rcicero` stashes the `user` and `token` values into your glo
 
 # Usage
 
-Four functions make the bulk of `rcicero`: `get_legislative_district()`, `get_official()`, `get_nonlegislative_district()`, and `get_upcoming_elections()`. Each returns a `data_frame` with a variety of information. 
+Four functions make the bulk of `rcicero`: `get_legislative_district()`, `get_official()`, `get_nonlegislative_district()`, and `get_upcoming_elections()`. Each returns a `data.frame` object, with the exception of `get_official()`, which returns a `list` of `data.frame`s. 
 
 ```
 ### Get legislative district data:

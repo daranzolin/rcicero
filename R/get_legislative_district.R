@@ -66,7 +66,6 @@ get_legislative_district <- function(search_loc = NULL, lat = NULL, lon = NULL) 
       )
   }
   df <- df %>%
-    dplyr::select(-document.id, -array.index) %>%
-    dplyr::as_data_frame()
+    format_df()
   return(df)
 }

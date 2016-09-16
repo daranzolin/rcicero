@@ -69,7 +69,6 @@ get_upcoming_elections <- function(election_expire_date_on_or_after = "today", i
     tidyjson::enter_object("country") %>%
     tidyjson::spread_values(name_short = tidyjson::jstring("name_short"),
                   name_long = tidyjson::jstring("name_long")) %>%
-    dplyr::select(-document.id, -array.index) %>%
-    dplyr::as_data_frame()
+    format_df()
   return(df)
 }
