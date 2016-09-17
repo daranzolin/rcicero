@@ -18,5 +18,5 @@ Imports: httr,
 URL: https://github.com/daranzolin/rcicero
 BugReports: https://github.com/daranzolin/rcicero/issues
 Suggests: knitr, rmarkdown,
-    testthat
+    testthat, shiny
 VignetteBuilder: knitr
