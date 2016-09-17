@@ -38,7 +38,7 @@ check_token <- function() {
   token
 }
 
-check_key <- function(x) {
+check_key <- function() {
   key <- Sys.getenv('CICERO_API_KEY')
   if (identical(key, "")) {
     stop("Please set env var CICERO_API_KEY to your personal api key",
