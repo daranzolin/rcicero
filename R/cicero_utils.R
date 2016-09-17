@@ -5,6 +5,7 @@
 #'
 #' @importFrom dplyr select as_data_frame contains
 #' @importFrom magrittr "%>%"
+#' @importFrom httr stop_for_status GET content user_agent
 #'
 #' @param username string - your Cicero account username
 #' @param password string - your Cicero account password
@@ -55,7 +56,19 @@ check_user <- function() {
   user
 }
 
-cicero_url <- function() 'https://cicero.azavea.com/v3.1'
+cicero_query <- function(path, args, content_type) {
+  url <- paste0('https://cicero.azavea.com/v3.1', path)
+  resp <- httr::GET(url,
+                    httr::user_agent("rcicero - https://github.com/daranzolin/rcicero"),
+                    query = args)
+  message(paste("You have", resp$headers$`x-cicero-credit-balance`, "credits remaining."))
+  httr::stop_for_status(resp)
+  if (as.numeric(resp$headers$`content-length`) < 150) {
+    stop("No results found")
+  }
+  json <- httr::content(resp, content_type)
+  return(json)
+}
 
 iter_args_list <- function(x, label) {
   ln <- list()

@@ -31,12 +31,7 @@ get_map <- function(state, country = "US", district_id, district_type) {
     district_type = district_type,
     include_image_data = TRUE
   )
-  url <- paste0(cicero_url(), "/map")
-  resp <- httr::GET(url,
-                    query = args)
-  httr::stop_for_status(resp)
-  message(paste("You have", resp$headers$`x-cicero-credit-balance`, "credits remaining."))
-  dat <- httr::content(resp, "parsed")
+  dat <- cicero_query("/map", args, "parsed")
   img_dat <- dat$response$results$maps[[1]]
   return(img_dat)
 }

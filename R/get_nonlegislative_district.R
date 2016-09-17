@@ -24,23 +24,20 @@ get_nonlegislative_district <- function(search_loc = NULL, lat = NULL, lon = NUL
     stop("type argument must be one of CENSUS, COUNTY, JUDICIAL, POLICE, SCHOOL, or WATERSHED")
   }
 
-  args <- sc(list(
-    key = check_key(),
-    token = check_token(),
-    user = check_user(),
-    search_loc = search_loc,
-    lat = lat,
-    lon = lon,
-    type = type,
-    format = "json")
+  args <- sc(
+    list(
+      key = check_key(),
+      token = check_token(),
+      user = check_user(),
+      search_loc = search_loc,
+      lat = lat,
+      lon = lon,
+      type = type,
+      format = "json"
+      )
     )
 
-  url <- paste0(cicero_url(), "/nonlegislative_district")
-  resp <- httr::GET(url,
-                    query = args)
-  httr::stop_for_status(resp)
-  json <- httr::content(resp, "text")
-  message(paste("You have", resp$headers$`x-cicero-credit-balance`, "credits remaining."))
+  json <- cicero_query("/nonlegislative_district", args, "text")
 
   if (!is.null(search_loc)) {
     df <- json %>% tidyjson::as.tbl_json() %>%

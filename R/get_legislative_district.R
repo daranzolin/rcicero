@@ -14,22 +14,19 @@
 #' @examples
 #'#' get_legislative_district("3175 Bowers Ave. Santa Clara, CA")
 get_legislative_district <- function(search_loc = NULL, lat = NULL, lon = NULL) {
-  args <- sc(list(
-    key = check_key(),
-    token = check_token(),
-    user = check_user(),
-    format = "json",
-    search_loc = search_loc,
-    lat = lat,
-    lon = lon
+  args <- sc(
+    list(
+      key = check_key(),
+      token = check_token(),
+      user = check_user(),
+      format = "json",
+      search_loc = search_loc,
+      lat = lat,
+      lon = lon
+      )
     )
-  )
-  url <- paste0(cicero_url(), "/legislative_district")
-  resp <- httr::GET(url,
-                    query = args)
-  httr::stop_for_status(resp)
-  json <- httr::content(resp, "text")
-  message(paste("You have", resp$headers$`x-cicero-credit-balance`, "credits remaining."))
+
+  json <- cicero_query("/legislative_district", args, "text")
 
   if (!is.null(search_loc)) {
     df <- json %>% tidyjson::as.tbl_json() %>%

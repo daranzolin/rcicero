@@ -62,12 +62,7 @@ get_official <- function(search_loc = NULL, lat = NULL, lon = NULL, first_name =
     c(args, last_name, dist_args)
     )
 
-  url <- paste0(cicero_url(), "/official")
-  resp <- httr::GET(url,
-                    query = args)
-  message(paste("You have", resp$headers$`x-cicero-credit-balance`, "credits remaining."))
-  httr::stop_for_status(resp)
-  json <- httr::content(resp, "text")
+  json <- cicero_query("/official", args, "text")
 
   if (!is.null(search_loc)) {
     gen_info <- json %>% tidyjson::as.tbl_json() %>%

@@ -29,24 +29,22 @@ get_upcoming_elections <- function(election_expire_date_on_or_after = "today", i
   key <- check_key()
   token <- check_token()
   user <- check_user()
-  args <- list(
-    key = key,
-    token = token,
-    user = user,
-    format = "json",
-    election_expire_date_on_or_after = election_expire_date_on_or_after,
-    is_state = is_state,
-    is_national = is_national,
-    is_transnational = is_transnational,
-    max = elections
-    )
-  args <- Filter(Negate(is.null), args)
-  url <- paste0(cicero_url(), "/election_event")
-  resp <- httr::GET(url,
-                    query = args)
-  message(paste("You have", resp$headers$`x-cicero-credit-balance`, "credits remaining."))
-  httr::stop_for_status(resp)
-  json <- httr::content(resp, "text")
+  args <- sc(
+    list(
+      key = key,
+      token = token,
+      user = user,
+      format = "json",
+      election_expire_date_on_or_after = election_expire_date_on_or_after,
+      is_state = is_state,
+      is_national = is_national,
+      is_transnational = is_transnational,
+      max = elections
+      )
+  )
+
+  json <- cicero_query("/election_event", args, "text")
+
   df <- json %>% tidyjson::as.tbl_json() %>%
     tidyjson::enter_object("response") %>%
     tidyjson::enter_object("results") %>%
