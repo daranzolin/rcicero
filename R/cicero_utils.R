@@ -88,4 +88,5 @@ format_df <- function(x) {
     dplyr::as_data_frame() %>%
     dplyr::select(-dplyr::contains("document"), -dplyr::contains("array")) %>%
     dplyr::distinct(.keep_all = TRUE)
+  return(x)
 }

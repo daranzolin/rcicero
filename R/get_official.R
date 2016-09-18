@@ -82,8 +82,7 @@ get_official <- function(search_loc = NULL, lat = NULL, lon = NULL, first_name =
                               initial_start_date = tidyjson::jstring("initial_term_start_date"),
                               current_term_start_date = tidyjson::jstring("current_term_start_date"),
                               webform_url = tidyjson::jstring("web_form_url")
-                              ) %>%
-      format_df()
+                              )
 
     identifiers <- json %>% tidyjson::as.tbl_json() %>%
       tidyjson::enter_object("response") %>%
@@ -96,8 +95,7 @@ get_official <- function(search_loc = NULL, lat = NULL, lon = NULL, first_name =
       tidyjson::enter_object("identifiers") %>% tidyjson::gather_array() %>%
       tidyjson::spread_values(identifier = tidyjson::jstring("identifier_value"),
                               identifier_type = tidyjson::jstring("identifier_type")
-                              ) %>%
-      format_df()
+                              )
 
     district_info <- json %>% tidyjson::as.tbl_json() %>%
       tidyjson::enter_object("response") %>%
@@ -115,8 +113,7 @@ get_official <- function(search_loc = NULL, lat = NULL, lon = NULL, first_name =
                               label = tidyjson::jstring("label"),
                               state = tidyjson::jstring("state"),
                               subtype = tidyjson::jstring("subtype")
-                              ) %>%
-      format_df()
+                              )
 
     committee_info <- json %>% tidyjson::as.tbl_json() %>%
       tidyjson::enter_object("response") %>%
@@ -129,8 +126,7 @@ get_official <- function(search_loc = NULL, lat = NULL, lon = NULL, first_name =
       tidyjson::enter_object("committees") %>% tidyjson::gather_array() %>%
       tidyjson::spread_values(description = tidyjson::jstring("description"),
                               comm_id = tidyjson::jstring("id")
-                              ) %>%
-      format_df()
+                              )
 
     address_info <- json %>% tidyjson::as.tbl_json() %>%
       tidyjson::enter_object("response") %>%
@@ -149,8 +145,7 @@ get_official <- function(search_loc = NULL, lat = NULL, lon = NULL, first_name =
                               address_1 = tidyjson::jstring("address_1"),
                               address_2 = tidyjson::jstring("address_2"),
                               address_3 = tidyjson::jstring("address_3")
-                              ) %>%
-      format_df()
+                              )
 
   } else {
     gen_info <- json %>% tidyjson::as.tbl_json() %>%
@@ -169,8 +164,7 @@ get_official <- function(search_loc = NULL, lat = NULL, lon = NULL, first_name =
                               initial_start_date = tidyjson::jstring("initial_term_start_date"),
                               current_term_start_date = tidyjson::jstring("current_term_start_date"),
                               webform_url = tidyjson::jstring("web_form_url")
-                              ) %>%
-      format_df()
+                              )
 
     identifiers <- json %>% tidyjson::as.tbl_json() %>%
       tidyjson::enter_object("response") %>%
@@ -182,8 +176,7 @@ get_official <- function(search_loc = NULL, lat = NULL, lon = NULL, first_name =
       tidyjson::enter_object("identifiers") %>% tidyjson::gather_array() %>%
       tidyjson::spread_values(identifier = tidyjson::jstring("identifier_value"),
                               identifier_type = tidyjson::jstring("identifier_type")
-                              ) %>%
-      format_df()
+                              )
 
     district_info <- json %>% tidyjson::as.tbl_json() %>%
       tidyjson::enter_object("response") %>%
@@ -200,8 +193,7 @@ get_official <- function(search_loc = NULL, lat = NULL, lon = NULL, first_name =
                               label = tidyjson::jstring("label"),
                               state = tidyjson::jstring("state"),
                               subtype = tidyjson::jstring("subtype")
-                              ) %>%
-      format_df()
+                              )
 
     committee_info <- json %>% tidyjson::as.tbl_json() %>%
       tidyjson::enter_object("response") %>%
@@ -213,8 +205,7 @@ get_official <- function(search_loc = NULL, lat = NULL, lon = NULL, first_name =
       tidyjson::enter_object("committees") %>% tidyjson::gather_array() %>%
       tidyjson::spread_values(description = tidyjson::jstring("description"),
                               comm_id = tidyjson::jstring("id")
-                              ) %>%
-      format_df()
+                              )
 
     address_info <- json %>% tidyjson::as.tbl_json() %>%
       tidyjson::enter_object("response") %>%
@@ -232,8 +223,7 @@ get_official <- function(search_loc = NULL, lat = NULL, lon = NULL, first_name =
                               address_1 = tidyjson::jstring("address_1"),
                               address_2 = tidyjson::jstring("address_2"),
                               address_3 = tidyjson::jstring("address_3")
-                              ) %>%
-      format_df()
+                              )
   }
 
   off_data <- list(
@@ -243,5 +233,6 @@ get_official <- function(search_loc = NULL, lat = NULL, lon = NULL, first_name =
     address_info = address_info,
     district_info = district_info
   )
+  off_data <- lapply(off_data, format_df)
   return(off_data)
 }
