@@ -27,14 +27,16 @@
 #'
 #' @examples
 #' #' get_official(lat = 40, lon = -75.1)
-#' #' get_official(search_loc = "3175 Bowers Ave. Santa Clara, CA", district_type = "STATE_LOWER", "STATE_UPPER")
+#' #' get_official(search_loc = "3175 Bowers Ave. Santa Clara, CA", district_type = c("STATE_LOWER", "STATE_UPPER"))
 #' #' get_official(last_name = "Obama")
 get_official <- function(search_loc = NULL, lat = NULL, lon = NULL, first_name = NULL, last_name = NULL,
                           valid_on = NULL,
                           district_type = c("STATE_LOWER", "STATE_UPPER",
                                            "NATIONAL_UPPER", "NATIONAL_LOWER", "NATIONAL_EXEC")) {
   if (!is.null(valid_on)) {
-    valid_on <- try(as.Date(valid_on, format = "%Y-%m-%d"))
+    valid_on <- try({
+      as.Date(valid_on, format = "%Y-%m-%d")
+      })
     if (class(valid_on) == "try-error" || is.na(valid_on)) {
       stop("valid_on argument must be in %Y-%m-%d format")
     }

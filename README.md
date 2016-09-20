@@ -32,7 +32,7 @@ Behind the scenes, `rcicero` stashes the `user` and `token` values into your glo
 
 # Usage
 
-Four functions make the bulk of `rcicero`: `get_legislative_district()`, `get_official()`, `get_nonlegislative_district()`, and `get_upcoming_elections()`. Each returns a `data.frame` object, with the exception of `get_official()`, which returns a `list` of `data.frame`s. 
+Four functions make the bulk of `rcicero`: `get_legislative_district()`, `get_official()`, `get_nonlegislative_district()`, and `get_upcoming_elections()`. Each returns a `data.frame` object, with the exception of `get_official()`, which returns a `list`. 
 
 ```
 ### Get legislative district data:
@@ -57,9 +57,6 @@ map <- get_map(state = "CA", district_type = "NATIONAL_LOWER", district_id = 5)
 
 # Future Work
 
-* Inclusion of historical data and maps
-* Better querying
-* Better error and exception handling
-* Tests
-* Vignette
-* A `shiny` app?
+* More useful vignette
+* More useful and sleeker shiny app
+* More tests

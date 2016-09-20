@@ -32,7 +32,7 @@ Obtain official information from the Cicero API. Can seach by latitude and longi
 }
 \examples{
 #' get_official(lat = 40, lon = -75.1)
-#' get_official(search_loc = "3175 Bowers Ave. Santa Clara, CA", district_type = "STATE_LOWER", "STATE_UPPER")
+#' get_official(search_loc = "3175 Bowers Ave. Santa Clara, CA", district_type = c("STATE_LOWER", "STATE_UPPER"))
 #' get_official(last_name = "Obama")
 }
 

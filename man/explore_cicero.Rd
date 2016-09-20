@@ -2,12 +2,12 @@
 % Please edit documentation in R/explore_cicero.R
 \name{explore_cicero}
 \alias{explore_cicero}
-\title{Shiny app for exploring Cicero data}
+\title{Shiny app for exploring Cicero data on elected officials}
 \usage{
 explore_cicero()
 }
 \description{
-Shiny app for exploring Cicero data
+Shiny app for exploring Cicero data on elected officials
 }
 \examples{
 

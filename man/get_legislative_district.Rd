@@ -16,6 +16,7 @@ data_frame
 get_legislative_district
 }
 \examples{
-#' get_legislative_district("3175 Bowers Ave. Santa Clara, CA")
+#' get_legislative_district(search_loc = "3175 Bowers Ave. Santa Clara, CA")
+#' get_legislative_district(lat = 40, lon = -75.1)
 }
 

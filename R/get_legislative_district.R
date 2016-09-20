@@ -12,7 +12,8 @@
 #' @export
 #'
 #' @examples
-#'#' get_legislative_district("3175 Bowers Ave. Santa Clara, CA")
+#'#' get_legislative_district(search_loc = "3175 Bowers Ave. Santa Clara, CA")
+#'#' get_legislative_district(lat = 40, lon = -75.1)
 get_legislative_district <- function(search_loc = NULL, lat = NULL, lon = NULL) {
   args <- sc(
     list(
