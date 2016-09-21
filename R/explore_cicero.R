@@ -1,7 +1,7 @@
 #' Shiny app for exploring Cicero data on elected officials
 #' @importFrom shiny fluidPage fluidRow sidebarPanel textInput selectInput actionButton column
 #' @importFrom shiny tabsetPanel tabPanel tableOutput textOutput htmlOutput icon
-#' @importFrom shiny eventReactive renderTable renderText renderUI
+#' @importFrom shiny eventReactive renderTable renderText renderUI shinyApp
 #' @importFrom leaflet leaflet addTiles addMarkers renderLeaflet leafletOutput
 #' @export
 #' @examples
