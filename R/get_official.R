@@ -34,9 +34,7 @@ get_official <- function(search_loc = NULL, lat = NULL, lon = NULL, first_name =
                           district_type = c("STATE_LOWER", "STATE_UPPER",
                                            "NATIONAL_UPPER", "NATIONAL_LOWER", "NATIONAL_EXEC")) {
   if (!is.null(valid_on)) {
-    valid_on <- try({
-      as.Date(valid_on, format = "%Y-%m-%d")
-      })
+    valid_on <- try(as.Date(valid_on, format = "%Y-%m-%d"))
     if (class(valid_on) == "try-error" || is.na(valid_on)) {
       stop("valid_on argument must be in %Y-%m-%d format")
     }
